@@ -1,79 +1,46 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Res,
-  HttpCode,
-  HttpStatus,
-  BadRequestException,
-  Header,
-  Redirect,
+  Get,
+  Param,
+  Post,
   Query,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
+import { UserInfo } from './UserInfo';
+import { UserLoginDto } from './dto/user-login.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('redirect/docs')
-  @Redirect('https://docs.nestjs.com', HttpStatus.FOUND)
-  getDocs(@Query('version') version) {
-    if (version && version === '5')
-      return { url: 'https://docs.nestjs.com/v5/' };
-  }
-
-  @Get(':userId/memo/:memoId')
-  findUserMemo(@Param() params: { [key: string]: string }) {
-    return { userId: params.userId, memoId: params.memoId };
-  }
-
-  @Get(':userId/note/:noteId')
-  findUserNote(
-    @Param('userId') userId: string,
-    @Param('noteId') noteId: string,
-  ) {
-    return {
-      userId: userId,
-      noteId: noteId,
-    };
-  }
-
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    const { name, email } = createUserDto;
-    return `유저를 생성했습니다. 이름: ${name}, 이메일: ${email}`;
+  async createUser(@Body() dto: CreateUserDto): Promise<void> {
+    console.log(dto);
   }
 
-  @Get()
-  findAll(@Res() res) {
-    const users = this.usersService.findAll();
-    return res.status(200).send(users);
+  @Post('/email-verify')
+  async verifyEmail(@Query() dto: VerifyEmailDto): Promise<void> {
+    console.log(dto);
+    return;
   }
 
-  @Redirect('https://nestjs.com', HttpStatus.MOVED_PERMANENTLY)
-  @Header('Custom', 'Test Header')
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    if (+id < 1) {
-      throw new BadRequestException('id는 0보다 큰 값이어야 합니다.');
-    }
-    return this.usersService.findOne(+id);
+  @Post('login')
+  async login(@Body() dto: UserLoginDto): Promise<void> {
+    console.log(dto);
+    return;
   }
 
-  @HttpCode(HttpStatus.ACCEPTED)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Get('/:id')
+  async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
+    console.log(userId);
+    return;
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
