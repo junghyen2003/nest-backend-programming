@@ -29,6 +29,22 @@ export class UsersController {
       return { url: 'https://docs.nestjs.com/v5/' };
   }
 
+  @Get(':userId/memo/:memoId')
+  findUserMemo(@Param() params: { [key: string]: string }) {
+    return { userId: params.userId, memoId: params.memoId };
+  }
+
+  @Get(':userId/note/:noteId')
+  findUserNote(
+    @Param('userId') userId: string,
+    @Param('noteId') noteId: string,
+  ) {
+    return {
+      userId: userId,
+      noteId: noteId,
+    };
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
