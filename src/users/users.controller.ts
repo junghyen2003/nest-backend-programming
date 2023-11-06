@@ -11,6 +11,8 @@ import {
   HttpStatus,
   BadRequestException,
   Header,
+  Redirect,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +21,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('redirect/docs')
+  @Redirect('https://docs.nestjs.com', HttpStatus.FOUND)
+  getDocs(@Query('version') version) {
+    if (version && version === '5')
+      return { url: 'https://docs.nestjs.com/v5/' };
+  }
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -31,6 +40,7 @@ export class UsersController {
     return res.status(200).send(users);
   }
 
+  @Redirect('https://nestjs.com', HttpStatus.MOVED_PERMANENTLY)
   @Header('Custom', 'Test Header')
   @Get(':id')
   findOne(@Param('id') id: string) {
