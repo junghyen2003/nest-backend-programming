@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+NestJS로 배우는 백엔드 프로그래밍 책 실습
 
 ## Installation
 
